@@ -36,6 +36,7 @@ const Workspaces: NextPage = () => {
         color: 'red',
         p: 'md',
       })
+      router.push('/signin');
     },
     onSuccess(data) {
       router.push(`${data?.data?.data?._id}`)

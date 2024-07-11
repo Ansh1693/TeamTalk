@@ -151,7 +151,7 @@ const Register: NextPage = () => {
               },
             })}
           >
-            anshgoyal
+            Ansh1693
           </MantineButton>
         </Center>
       </Stack>
