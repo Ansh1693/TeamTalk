@@ -6,6 +6,9 @@ import { verificationHtml } from '../html/confirmation-code-email'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 
+console.log('Google client id:', process.env.GOOGLE_CLIENT_ID)
+console.log('Google client secret:', process.env.GOOGLE_CLIENT_SECRET)
+
 // Configure Google OAuth strategy
 passport.use(
   new GoogleStrategy(
@@ -18,7 +21,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         // Find or create a user based on the Google profile information
-        let user = await User.findOne({ googleId: profile.id })
+        let user = await User.findOne({ email: profile.emails[0].value })
         if (!user) {
           user = new User({
             googleId: profile.id,
@@ -32,8 +35,8 @@ passport.use(
       } catch (error) {
         return done(error, false)
       }
-    }
-  )
+    },
+  ),
 )
 
 passport.serializeUser((user, done) => {
@@ -50,7 +53,7 @@ passport.deserializeUser((user, done) => {
 export const register = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const { username, email } = req.body
 
@@ -84,7 +87,7 @@ export const register = async (
     sendEmail(
       email,
       'TeamTalk confirmation code',
-      verificationHtml(verificationToken)
+      verificationHtml(verificationToken),
     )
 
     res.status(201).json({
@@ -107,7 +110,7 @@ export const register = async (
 export const signin = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const { email } = req.body
 
@@ -138,7 +141,7 @@ export const signin = async (
     sendEmail(
       email,
       'TeamTalk confirmation code',
-      verificationHtml(verificationToken)
+      verificationHtml(verificationToken),
     )
 
     res.status(201).json({
@@ -161,7 +164,7 @@ export const signin = async (
 export const verify = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     if (!req.body.loginVerificationCode) {
@@ -215,7 +218,7 @@ export const verify = async (
 export const googleCallback = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   passport.authenticate('google', (err, user) => {
     if (err) {
@@ -231,7 +234,7 @@ export const googleCallback = async (
     const token = user.getSignedJwtToken()
 
     res.redirect(
-      `${process.env.CLIENT_URL}?token=${token}&email=${user.email}&username=${user.username}`
+      `${process.env.CLIENT_URL}?token=${token}&email=${user.email}&username=${user.username}`,
     )
   })(req, res, next)
 }

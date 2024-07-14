@@ -7,7 +7,7 @@ export interface ConversationSchemaType {
   description: string
   isSelf: boolean
   organisation: mongoose.Schema.Types.ObjectId
-  createdBy: mongoose.Schema.Types.ObjectId
+  createdBy: mongoose.Schema.Types.ObjectId & UserSchemaType
   hasNotOpen: mongoose.Schema.Types.ObjectId[]
   isConversation: boolean
   isOnline: boolean
@@ -20,7 +20,7 @@ const conversationSchema = new mongoose.Schema<ConversationSchemaType>(
     name: {
       type: String,
       default() {
-        if (this.createdBy) {
+        if (this?.createdBy) {
           return this.createdBy.username
         }
         return ''
@@ -68,7 +68,7 @@ const conversationSchema = new mongoose.Schema<ConversationSchemaType>(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 )
 
 // Define a compound index on the collaborators field

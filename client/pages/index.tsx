@@ -36,7 +36,7 @@ const Workspaces: NextPage = () => {
         color: 'red',
         p: 'md',
       })
-      router.push('/signin');
+      router.push('/signin')
     },
     onSuccess(data) {
       router.push(`${data?.data?.data?._id}`)
@@ -66,6 +66,7 @@ const Workspaces: NextPage = () => {
       setEmail(router.query.email as string)
       localStorage.setItem('signUpEmail', router.query?.email as string)
       localStorage.setItem('access-token', router?.query?.token as string)
+      router.push('/')
     }
   }, [router.query.token])
   React.useEffect(() => {
@@ -167,7 +168,7 @@ const Workspaces: NextPage = () => {
                       color={getColorByIndex(index)}
                       radius="xl"
                     >
-                      {organisation.name[0].toUpperCase()}
+                      {organisation?.name?.toUpperCase()}
                     </Avatar>
                     <Flex direction="column">
                       <Text c="white" transform="capitalize">
