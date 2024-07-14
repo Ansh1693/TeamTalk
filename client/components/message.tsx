@@ -23,13 +23,13 @@ import { useRouter } from 'next/router'
 import { GoMegaphone } from 'react-icons/go'
 import { Message as IMessage, MessageProps, User } from '../utils/interfaces'
 
-const Message = ({
+const Message: React.FunctionComponent<MessageProps> = ({
   messagesLoading,
   isLoading,
   type,
   isThread = false,
   open,
-}: MessageProps) => {
+}) => {
   const router = useRouter()
   const { threadId } = router.query
 
@@ -73,16 +73,14 @@ const Message = ({
           entityToHTML: (entity, originalText) => {
             if (entity.type === 'LINK') {
               const { url } = entity.data
-              return (
-                <a className="entity-link" target="_blank" href={url}>
-                  {originalText}
-                </a>
-              )
+              return `<a className="entity-link" target="_blank" href={url}>
+                  ${originalText}
+                </a>`
             } else if (entity.type === 'MENTION' || entity.type === 'HASHTAG') {
-              return <span className="entity-mention">{originalText}</span>
+              return `<span className="entity-mention">${originalText}</span>`
             } else if (entity.type === 'IMAGE') {
               const { src } = entity.data
-              return <img src={src} className="entity-image" />
+              return `<img src=${src} className="entity-image" />`
             }
 
             return originalText

@@ -22,8 +22,16 @@ import axios from '../../services/axios'
 import { notifications } from '@mantine/notifications'
 import { useAppContext } from '../../providers/app-provider'
 import { ApiError, MessageLayoutProps, User } from '../../utils/interfaces'
+
+// import Message from '../message'
+
 const Message = dynamic(() => import('../message'), {
   ssr: false,
+  loading: () => (
+    <Paper radius="lg">
+      <Skeleton height={100} />
+    </Paper>
+  ),
 })
 
 const useStyles = createStyles((theme) => ({
